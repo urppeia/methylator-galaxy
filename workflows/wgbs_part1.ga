@@ -1,0 +1,574 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "comments": [],
+    "format-version": "0.1",
+    "name": "WGBS",
+    "report": {
+        "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
+    },
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Input Dataset Collection"
+                }
+            ],
+            "label": "Input Dataset Collection",
+            "name": "Input dataset collection",
+            "outputs": [],
+            "position": {
+                "left": 0,
+                "top": 291.1167405737479
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null, \"collection_type\": \"list:paired\"}",
+            "tool_version": null,
+            "type": "data_collection_input",
+            "uuid": "aebf41dd-2893-4052-9438-aabd50fa1de4",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Genome"
+                }
+            ],
+            "label": "Genome",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 783.0234369921602,
+                "top": 148.66700399763306
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "e8cda81d-97fb-45bc-8081-285e223aeca1",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/fastqc/fastqc/0.74+galaxy1",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "input_file": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "FastQC",
+            "outputs": [
+                {
+                    "name": "html_file",
+                    "type": "html"
+                },
+                {
+                    "name": "text_file",
+                    "type": "txt"
+                }
+            ],
+            "position": {
+                "left": 318.03315147866573,
+                "top": 147.75687776887358
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/fastqc/fastqc/0.74+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "2c64fded1286",
+                "name": "fastqc",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"adapters\": null, \"chromInfo\": \"/galaxy/tool-data/shared/ucsc/chrom/?.len\", \"contaminants\": null, \"input_file\": {\"__class__\": \"ConnectedValue\"}, \"input_file|__identifier__\": \"forward\", \"kmers\": \"7\", \"limits\": null, \"min_length\": null, \"nogroup\": false, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.74+galaxy1",
+            "type": "tool",
+            "uuid": "04cbe038-cf0e-4a4f-9385-ce46ff253072",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/trim_galore/trim_galore/0.6.10+galaxy0",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "singlePaired|input_mate1": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "singlePaired|input_mate2": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Trim Galore!",
+                    "name": "singlePaired"
+                },
+                {
+                    "description": "runtime parameter for tool Trim Galore!",
+                    "name": "singlePaired"
+                }
+            ],
+            "label": null,
+            "name": "Trim Galore!",
+            "outputs": [
+                {
+                    "name": "trimmed_reads_pair1",
+                    "type": "input"
+                },
+                {
+                    "name": "trimmed_reads_pair2",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 314.11723561807406,
+                "top": 458.7885890902526
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/trim_galore/trim_galore/0.6.10+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "b94789823aad",
+                "name": "trim_galore",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"params\": {\"settingsType\": \"default\", \"__current_case__\": 0}, \"rrbs\": {\"settingsType\": \"default\", \"__current_case__\": 0}, \"singlePaired\": {\"sPaired\": \"paired\", \"__current_case__\": 1, \"input_mate1\": {\"__class__\": \"RuntimeValue\"}, \"input_mate2\": {\"__class__\": \"RuntimeValue\"}, \"trimming\": {\"trimming_select\": \"\", \"__current_case__\": 0}, \"trim1\": false, \"three_prime_clip_R1\": null, \"three_prime_clip_R2\": null}, \"trimming\": {\"settingsType\": \"default\", \"__current_case__\": 0}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.6.10+galaxy0",
+            "type": "tool",
+            "uuid": "d8ff47f1-54ee-46d7-b310-4927da78532c",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/jobucher/bbtools_clumpify/clumpify/0.1.0+galaxy0",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "singlePaired|input_mate1": {
+                    "id": 3,
+                    "output_name": "trimmed_reads_pair1"
+                },
+                "singlePaired|input_mate2": {
+                    "id": 3,
+                    "output_name": "trimmed_reads_pair2"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool BBMap Clumpify: Deduplication",
+                    "name": "singlePaired"
+                },
+                {
+                    "description": "runtime parameter for tool BBMap Clumpify: Deduplication",
+                    "name": "singlePaired"
+                }
+            ],
+            "label": null,
+            "name": "BBMap Clumpify: Deduplication",
+            "outputs": [
+                {
+                    "name": "paired_output1",
+                    "type": "fastq.gz"
+                },
+                {
+                    "name": "paired_output2",
+                    "type": "fastq.gz"
+                }
+            ],
+            "position": {
+                "left": 577.0937013186675,
+                "top": 355.6242001228274
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/jobucher/bbtools_clumpify/clumpify/0.1.0+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "b7328e9ceae2",
+                "name": "bbtools_clumpify",
+                "owner": "jobucher",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"advanced_parameters\": {\"use_advanced_options\": \"true\", \"__current_case__\": 0, \"dedupe\": true, \"optical\": true}, \"parameter_selection\": {\"use_sequencing_platform\": \"true\", \"__current_case__\": 0, \"sequencing_platform\": \"dupedist=40\"}, \"singlePaired\": {\"sPaired\": \"paired\", \"__current_case__\": 1, \"input_mate1\": {\"__class__\": \"ConnectedValue\"}, \"input_mate2\": {\"__class__\": \"ConnectedValue\"}}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.0+galaxy0",
+            "type": "tool",
+            "uuid": "f469048f-0d2a-4e24-8210-c81e22ff1b18",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_bowtie2/0.22.1+galaxy4",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "refGenomeSource|own_file": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "singlePaired|mate_list_0|input_mate1": {
+                    "id": 4,
+                    "output_name": "paired_output1"
+                },
+                "singlePaired|mate_list_0|input_mate2": {
+                    "id": 4,
+                    "output_name": "paired_output2"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Bismark Mapper",
+                    "name": "refGenomeSource"
+                }
+            ],
+            "label": null,
+            "name": "Bismark Mapper",
+            "outputs": [
+                {
+                    "name": "report_file",
+                    "type": "txt"
+                },
+                {
+                    "name": "output",
+                    "type": "qname_input_sorted.bam"
+                },
+                {
+                    "name": "output_unmapped_reads_l",
+                    "type": "fastq"
+                },
+                {
+                    "name": "output_unmapped_reads_r",
+                    "type": "fastq"
+                }
+            ],
+            "position": {
+                "left": 813.4076352375325,
+                "top": 286.3981262858649
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_bowtie2/0.22.1+galaxy4",
+            "tool_shed_repository": {
+                "changeset_revision": "8c191acde702",
+                "name": "bismark",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"params\": {\"settingsType\": \"custom\", \"__current_case__\": 1, \"seed_mismatches\": \"0\", \"seed_len\": \"20\", \"seed_extention_attempts\": \"15\", \"max_reseed\": \"2\", \"qupto\": \"0\", \"skip_reads\": \"0\", \"score_min\": \"\", \"no_discordant\": false, \"no_mixed\": false, \"suppressed_read_file\": false, \"unmapped_read_file\": true, \"bismark_stdout\": false, \"isReportOutput\": true, \"non_directional\": false, \"pbat\": false}, \"refGenomeSource\": {\"genomeSource\": \"history\", \"__current_case__\": 2, \"own_file\": {\"__class__\": \"ConnectedValue\"}}, \"singlePaired\": {\"sPaired\": \"paired\", \"__current_case__\": 1, \"mate_list\": [{\"__index__\": 0, \"input_mate1\": {\"__class__\": \"ConnectedValue\"}, \"input_mate2\": {\"__class__\": \"ConnectedValue\"}}], \"minInsert\": \"0\", \"maxInsert\": \"500\"}, \"sort_bam\": false, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.22.1+galaxy4",
+            "type": "tool",
+            "uuid": "9ec6387f-faea-4933-af83-9eef7738f217",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_bowtie2/0.22.1+galaxy4",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "refGenomeSource|own_file": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "singlePaired|input_singles": {
+                    "id": 5,
+                    "output_name": "output_unmapped_reads_l"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Bismark Mapper",
+                    "name": "refGenomeSource"
+                },
+                {
+                    "description": "runtime parameter for tool Bismark Mapper",
+                    "name": "singlePaired"
+                },
+                {
+                    "description": "runtime parameter for tool Bismark Mapper",
+                    "name": "sort_bam"
+                }
+            ],
+            "label": null,
+            "name": "Bismark Mapper",
+            "outputs": [
+                {
+                    "name": "report_file",
+                    "type": "txt"
+                },
+                {
+                    "name": "output",
+                    "type": "qname_input_sorted.bam"
+                }
+            ],
+            "position": {
+                "left": 1089.9999466456852,
+                "top": 3.861921460232054
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_bowtie2/0.22.1+galaxy4",
+            "tool_shed_repository": {
+                "changeset_revision": "8c191acde702",
+                "name": "bismark",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"params\": {\"settingsType\": \"default\", \"__current_case__\": 0}, \"refGenomeSource\": {\"genomeSource\": \"history\", \"__current_case__\": 2, \"own_file\": {\"__class__\": \"ConnectedValue\"}}, \"singlePaired\": {\"sPaired\": \"single\", \"__current_case__\": 0, \"input_singles\": {\"__class__\": \"ConnectedValue\"}}, \"sort_bam\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.22.1+galaxy4",
+            "type": "tool",
+            "uuid": "ba77205d-2b66-4cc5-aceb-ecb557d59695",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "input": {
+                    "id": 5,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Bismark Meth. Extractor",
+                    "name": "input"
+                }
+            ],
+            "label": null,
+            "name": "Bismark Meth. Extractor",
+            "outputs": [
+                {
+                    "name": "output_splitting_report",
+                    "type": "tabular"
+                },
+                {
+                    "name": "output_mbias_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "output_cytosine_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "coverage_file",
+                    "type": "tabular.gz"
+                },
+                {
+                    "name": "compressed_output",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "left": 1087.084441514946,
+                "top": 297.56220985024504
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "8c191acde702",
+                "name": "bismark",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"cytosine_report\": {\"cytosine_report_selector\": true, \"__current_case__\": 0, \"refGenomeSource\": {\"genomeSource\": \"history\", \"__current_case__\": 1, \"own_file\": {\"__class__\": \"RuntimeValue\"}}, \"cpg_context\": false, \"coverage_output\": true}, \"input\": {\"__class__\": \"RuntimeValue\"}, \"mbias_report\": true, \"output_settings\": {\"comprehensive\": true, \"merge_non_cpg\": false, \"separate_logfile\": false}, \"singlePaired\": {\"sPaired\": \"paired\", \"__current_case__\": 1, \"ignore_r1\": \"0\", \"ignore_3prime_r1\": \"0\", \"ignore_r2\": \"0\", \"ignore_3prime_r2\": \"0\", \"no_overlap\": false}, \"splitting_report\": true, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.22.1+galaxy1",
+            "type": "tool",
+            "uuid": "be0b7dfb-059d-4c5a-812f-a18c525e118f",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_bowtie2/0.22.1+galaxy4",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "refGenomeSource|own_file": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "singlePaired|input_singles": {
+                    "id": 5,
+                    "output_name": "output_unmapped_reads_r"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Bismark Mapper",
+                    "name": "refGenomeSource"
+                },
+                {
+                    "description": "runtime parameter for tool Bismark Mapper",
+                    "name": "singlePaired"
+                }
+            ],
+            "label": null,
+            "name": "Bismark Mapper",
+            "outputs": [
+                {
+                    "name": "report_file",
+                    "type": "txt"
+                },
+                {
+                    "name": "output",
+                    "type": "qname_input_sorted.bam"
+                }
+            ],
+            "position": {
+                "left": 1085.597670562621,
+                "top": 766.5158838419115
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_bowtie2/0.22.1+galaxy4",
+            "tool_shed_repository": {
+                "changeset_revision": "8c191acde702",
+                "name": "bismark",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"params\": {\"settingsType\": \"custom\", \"__current_case__\": 1, \"seed_mismatches\": \"0\", \"seed_len\": \"20\", \"seed_extention_attempts\": \"15\", \"max_reseed\": \"2\", \"qupto\": \"0\", \"skip_reads\": \"0\", \"score_min\": \"\", \"no_discordant\": false, \"no_mixed\": false, \"suppressed_read_file\": false, \"unmapped_read_file\": false, \"bismark_stdout\": false, \"isReportOutput\": true, \"non_directional\": false, \"pbat\": true}, \"refGenomeSource\": {\"genomeSource\": \"history\", \"__current_case__\": 2, \"own_file\": {\"__class__\": \"ConnectedValue\"}}, \"singlePaired\": {\"sPaired\": \"single\", \"__current_case__\": 0, \"input_singles\": {\"__class__\": \"ConnectedValue\"}}, \"sort_bam\": false, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.22.1+galaxy4",
+            "type": "tool",
+            "uuid": "0dab04ee-240d-41fc-bd71-4bb65d221707",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "input": {
+                    "id": 6,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Bismark Meth. Extractor",
+            "outputs": [
+                {
+                    "name": "output_splitting_report",
+                    "type": "tabular"
+                },
+                {
+                    "name": "output_mbias_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "output_cytosine_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "coverage_file",
+                    "type": "tabular.gz"
+                },
+                {
+                    "name": "compressed_output",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "left": 1347.0412914657945,
+                "top": 0.0
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "8c191acde702",
+                "name": "bismark",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"cytosine_report\": {\"cytosine_report_selector\": true, \"__current_case__\": 0, \"refGenomeSource\": {\"genomeSource\": \"history\", \"__current_case__\": 1, \"own_file\": {\"__class__\": \"RuntimeValue\"}}, \"cpg_context\": false, \"coverage_output\": true}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"mbias_report\": true, \"output_settings\": {\"comprehensive\": true, \"merge_non_cpg\": false, \"separate_logfile\": false}, \"singlePaired\": {\"sPaired\": \"single\", \"__current_case__\": 0, \"ignore_r1\": \"0\", \"ignore_3prime_r1\": \"0\"}, \"splitting_report\": true, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.22.1+galaxy1",
+            "type": "tool",
+            "uuid": "132f895f-8c78-4359-8b14-c7cf5c68974b",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "10": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "input": {
+                    "id": 8,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Bismark Meth. Extractor",
+            "outputs": [
+                {
+                    "name": "output_splitting_report",
+                    "type": "tabular"
+                },
+                {
+                    "name": "output_mbias_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "output_cytosine_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "coverage_file",
+                    "type": "tabular.gz"
+                },
+                {
+                    "name": "compressed_output",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "left": 1352.7089904176612,
+                "top": 581.181938118714
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "8c191acde702",
+                "name": "bismark",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"cytosine_report\": {\"cytosine_report_selector\": true, \"__current_case__\": 0, \"refGenomeSource\": {\"genomeSource\": \"history\", \"__current_case__\": 1, \"own_file\": {\"__class__\": \"RuntimeValue\"}}, \"cpg_context\": false, \"coverage_output\": true}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"mbias_report\": true, \"output_settings\": {\"comprehensive\": true, \"merge_non_cpg\": false, \"separate_logfile\": false}, \"singlePaired\": {\"sPaired\": \"single\", \"__current_case__\": 0, \"ignore_r1\": \"0\", \"ignore_3prime_r1\": \"0\"}, \"splitting_report\": true, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.22.1+galaxy1",
+            "type": "tool",
+            "uuid": "14f8ae9b-2fe4-4c83-8f4c-7fa8766781be",
+            "when": null,
+            "workflow_outputs": []
+        }
+    },
+    "tags": [],
+    "uuid": "146c3ce7-13b8-4fa5-9c3b-4d63fffa7131",
+    "version": 9
+}

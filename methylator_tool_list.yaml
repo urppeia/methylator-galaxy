@@ -1,0 +1,116 @@
+tools:
+- name: samtools_merge
+  owner: iuc
+  revisions:
+  - a7617eb92baf
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: bismark_local
+  owner: jobucher
+  revisions:
+  - 64e8c787e740
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: bedtools
+  owner: iuc
+  revisions:
+  - 2892111d91f8
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: bismark
+  owner: bgruening
+  revisions:
+  - 8c191acde702
+  - 0f8646f22b8d
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: sambamba_filter
+  owner: lomereiter
+  revisions:
+  - af897e0a3c13
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: sambamba_flagstat
+  owner: bgruening
+  revisions:
+  - cfd6e76541ff
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: sambamba_merge
+  owner: bgruening
+  revisions:
+  - 66a7ee77d7e3
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: sambamba_markdup
+  owner: bgruening
+  revisions:
+  - a348429b6fec
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: sambamba_sort
+  owner: bgruening
+  revisions:
+  - 6aa99e436263
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: sambamba
+  owner: artbio
+  revisions:
+  - de833cc76a8e
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: multiqc
+  owner: iuc
+  revisions:
+  - e4dd4c0622f6
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: monalisa
+  owner: jobucher
+  revisions:
+  - d3dccb02be80
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: rgreat
+  owner: jobucher
+  revisions:
+  - 29cae736023c
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: methylkit
+  owner: rnateam
+  revisions:
+  - a8705df7c57f
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: dmrseq
+  owner: jobucher
+  revisions:
+  - c00eb94a9570
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: bismark2bedgraph
+  owner: jobucher
+  revisions:
+  - 167810b0454e
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: bbtools_clumpify
+  owner: jobucher
+  revisions:
+  - b7328e9ceae2
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: trim_galore
+  owner: bgruening
+  revisions:
+  - b94789823aad
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: fastqc
+  owner: devteam
+  revisions:
+  - 2c64fded1286
+  tool_panel_section_label: Methylator
+  tool_shed_url: toolshed.g2.bx.psu.edu
