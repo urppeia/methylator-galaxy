@@ -1,0 +1,338 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "comments": [],
+    "format-version": "0.1",
+    "name": "WGBS_part2",
+    "report": {
+        "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
+    },
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Input Dataset Collection"
+                }
+            ],
+            "label": "Input Dataset Collection",
+            "name": "Input dataset collection",
+            "outputs": [],
+            "position": {
+                "left": 0,
+                "top": 417.2322198373686
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null, \"collection_type\": \"list:paired\"}",
+            "tool_version": null,
+            "type": "data_collection_input",
+            "uuid": "71a4d20f-9437-41e9-a487-7a4fd8ca7e87",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [],
+            "label": null,
+            "name": "Bismark Meth. Extractor",
+            "outputs": [
+                {
+                    "name": "output_splitting_report",
+                    "type": "tabular"
+                },
+                {
+                    "name": "output_mbias_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "output_cytosine_report",
+                    "type": "txt"
+                },
+                {
+                    "name": "coverage_file",
+                    "type": "tabular.gz"
+                },
+                {
+                    "name": "compressed_output",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "left": 1861.1119530904489,
+                "top": 169.57642782135787
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/bismark/bismark_methylation_extractor/0.22.1+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "8c191acde702",
+                "name": "bismark",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"cytosine_report\": {\"cytosine_report_selector\": true, \"__current_case__\": 0, \"refGenomeSource\": {\"genomeSource\": \"history\", \"__current_case__\": 1, \"own_file\": {\"__class__\": \"RuntimeValue\"}}, \"cpg_context\": false, \"coverage_output\": true}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"mbias_report\": true, \"output_settings\": {\"comprehensive\": true, \"merge_non_cpg\": false, \"separate_logfile\": false}, \"singlePaired\": {\"sPaired\": \"single\", \"__current_case__\": 0, \"ignore_r1\": \"0\", \"ignore_3prime_r1\": \"0\"}, \"splitting_report\": true, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.22.1+galaxy1",
+            "type": "tool",
+            "uuid": "7943601d-cc4b-43a8-a80e-ccdfe35b2b29",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/jobucher/dmrseq/dmrseq/1.22.0+galaxy1",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "coverage_files": {
+                    "id": 1,
+                    "output_name": "coverage_file"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool dmrseq: Differentially methylated regions analysis",
+                    "name": "sample_info_file"
+                }
+            ],
+            "label": null,
+            "name": "dmrseq: Differentially methylated regions analysis",
+            "outputs": [
+                {
+                    "name": "outputRDS",
+                    "type": "rdata"
+                },
+                {
+                    "name": "tabular_regions",
+                    "type": "tabular"
+                },
+                {
+                    "name": "tabular_hypo",
+                    "type": "tabular"
+                },
+                {
+                    "name": "tabular_hyper",
+                    "type": "tabular"
+                },
+                {
+                    "name": "bsseq_object",
+                    "type": "rds"
+                }
+            ],
+            "position": {
+                "left": 2153.107756371974,
+                "top": 0
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/jobucher/dmrseq/dmrseq/1.22.0+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "c00eb94a9570",
+                "name": "dmrseq",
+                "owner": "jobucher",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adjust_covariate\": null, \"advanced_parameters\": {\"advanced_options\": \"false\", \"__current_case__\": 1}, \"coverage_files\": {\"__class__\": \"ConnectedValue\"}, \"cutoff\": \"0.1\", \"cytosine_context\": \"CG\", \"reference_group\": \"\", \"sample_id_col\": \"\", \"sample_info_file\": {\"__class__\": \"RuntimeValue\"}, \"test_covariate\": \"\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.22.0+galaxy1",
+            "type": "tool",
+            "uuid": "a47a0ca8-1ba4-4cb6-8c19-468dcf14abd7",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/rnateam/methylkit/methylkit/0.99.2",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "control_series_0|input": {
+                    "id": 1,
+                    "output_name": "coverage_file"
+                },
+                "test_series_0|input": {
+                    "id": 1,
+                    "output_name": "coverage_file"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "methylKit",
+            "outputs": [
+                {
+                    "name": "output_statistics",
+                    "type": "pdf"
+                },
+                {
+                    "name": "output_correlation",
+                    "type": "pdf"
+                },
+                {
+                    "name": "output_myDiff",
+                    "type": "bedgraph"
+                },
+                {
+                    "name": "output_MethylDiff",
+                    "type": "bedgraph"
+                },
+                {
+                    "name": "output_MethPerChr",
+                    "type": "tabular"
+                },
+                {
+                    "name": "output_clustering",
+                    "type": "pdf"
+                },
+                {
+                    "name": "output_PCA",
+                    "type": "pdf"
+                },
+                {
+                    "name": "output_seg_raw",
+                    "type": "bed"
+                },
+                {
+                    "name": "output_seg_diff",
+                    "type": "bed"
+                }
+            ],
+            "position": {
+                "left": 2156.531615182166,
+                "top": 328.5882796224708
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/rnateam/methylkit/methylkit/0.99.2",
+            "tool_shed_repository": {
+                "changeset_revision": "a8705df7c57f",
+                "name": "methylkit",
+                "owner": "rnateam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"assembly\": \"hg18\", \"control_series\": [{\"__index__\": 0, \"input\": {\"__class__\": \"ConnectedValue\"}}], \"correlation\": \"pearson\", \"input_type\": {\"choice\": \"all\", \"__current_case__\": 0, \"overdispersion\": \"none\", \"adjust\": \"SLIM\", \"effect\": \"wmean\", \"test\": \"Chisq\", \"qvalue_cutoff\": \"0.01\", \"meth_cutoff\": \"25.0\", \"type\": \"all\", \"dist\": \"correlation\", \"method\": \"ward\"}, \"pipeline\": \"amp\", \"test_series\": [{\"__index__\": 0, \"input\": {\"__class__\": \"ConnectedValue\"}}], \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.99.2",
+            "type": "tool",
+            "uuid": "69eb4943-3345-4497-9e31-8dcf942c7a0b",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/jobucher/rgreat/rgreat/2.4.0+galaxy1",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input_hyper": {
+                    "id": 2,
+                    "output_name": "tabular_hyper"
+                },
+                "input_hypo": {
+                    "id": 2,
+                    "output_name": "tabular_hypo"
+                },
+                "input_regions": {
+                    "id": 3,
+                    "output_name": "output_myDiff"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Genomic Regions Enrichment of Annotations Tool",
+            "outputs": [
+                {
+                    "name": "output_hypo",
+                    "type": "rds, rdata"
+                },
+                {
+                    "name": "output_hyper",
+                    "type": "rds, rdata"
+                }
+            ],
+            "position": {
+                "left": 2452.6508622821507,
+                "top": 69.09779135953623
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/jobucher/rgreat/rgreat/2.4.0+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "29cae736023c",
+                "name": "rgreat",
+                "owner": "jobucher",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"advanced_parameters\": {\"advanced_options\": \"false\", \"__current_case__\": 1}, \"biomart_dataset\": \"aastaci_eg_gene\", \"cytosine_context\": \"CG\", \"input_hyper\": {\"__class__\": \"ConnectedValue\"}, \"input_hypo\": {\"__class__\": \"ConnectedValue\"}, \"input_regions\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.4.0+galaxy1",
+            "type": "tool",
+            "uuid": "c0fb25c6-7ffb-404f-b9ee-8a4fcd64355c",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/jobucher/monalisa/monaLisa/1.8.0+galaxy2",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input_hypo": {
+                    "id": 2,
+                    "output_name": "tabular_hypo"
+                },
+                "input_regions": {
+                    "id": 3,
+                    "output_name": "output_myDiff"
+                },
+                "sample_info_file": {
+                    "id": 2,
+                    "output_name": "tabular_hyper"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool monaLisa - MOtif aNAlysis with Lisa",
+                    "name": "input_hyper"
+                },
+                {
+                    "description": "runtime parameter for tool monaLisa - MOtif aNAlysis with Lisa",
+                    "name": "reference_genome"
+                }
+            ],
+            "label": null,
+            "name": "monaLisa - MOtif aNAlysis with Lisa",
+            "outputs": [
+                {
+                    "name": "output_hypo",
+                    "type": "rds"
+                },
+                {
+                    "name": "output_hyper",
+                    "type": "rds"
+                }
+            ],
+            "position": {
+                "left": 2453.55591519347,
+                "top": 453.89672381959934
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/jobucher/monalisa/monaLisa/1.8.0+galaxy2",
+            "tool_shed_repository": {
+                "changeset_revision": "d3dccb02be80",
+                "name": "monalisa",
+                "owner": "jobucher",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"cytosine_context\": \"CG\", \"input_hyper\": {\"__class__\": \"RuntimeValue\"}, \"input_hypo\": {\"__class__\": \"ConnectedValue\"}, \"input_regions\": {\"__class__\": \"ConnectedValue\"}, \"reference_genome\": {\"__class__\": \"RuntimeValue\"}, \"sample_info_file\": {\"__class__\": \"ConnectedValue\"}, \"tax_group\": \"plants\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.8.0+galaxy2",
+            "type": "tool",
+            "uuid": "9bd590b3-8123-4a30-a0a8-b3b6039f1cf7",
+            "when": null,
+            "workflow_outputs": []
+        }
+    },
+    "tags": [],
+    "uuid": "4c2fa12a-c7b6-4982-99a9-50d0dbd848f7",
+    "version": 3
+}
