@@ -17,12 +17,6 @@ This command will build an image named `methylator-galaxy` with the tag `latest`
 
 ### Running the Docker Image
 
-You can run the `methylator` tool directly from the Docker image. For example, to see the `methylator` help message:
-
-```bash
-docker run methylator-galaxy methylator --help
-```
-
 To run `methylator` with your data, you will typically need to mount your data directory into the container. Replace `/path/to/your/data` with the actual path to your data on your host machine:
 
 ```bash
