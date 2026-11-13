@@ -1,4 +1,4 @@
-FROM quay.io/bgruening/galaxy:24.1
+FROM quay.io/bgruening/galaxy:26.1
 
 LABEL maintainer="Deepak K. Tanwar, dktanwar@hotmail.com"
 
@@ -28,17 +28,17 @@ RUN --mount=type=cache,target=/tmp \
 RUN mkdir -p ${GALAXY_HOME}/workflows
 
 # Add tool definitions and scripts (more frequently changed, added after stable layers)
-COPY methylator_tool_list.yaml ${GALAXY_ROOT}/tools.yaml
-COPY install_methylator_tools.py ${GALAXY_ROOT}/
+COPY ../config/methylator_tool_list.yaml ${GALAXY_ROOT}/tools.yaml
+COPY ../scripts/install_methylator_tools.py ${GALAXY_ROOT}/
 RUN chmod +x ${GALAXY_ROOT}/install_methylator_tools.py
 
 # Add workflow files (frequently changed, added last)
-COPY ./workflows/ ${GALAXY_HOME}/workflows/
+COPY ../workflows/ ${GALAXY_HOME}/workflows/
 
 # Note: Tools will be installed after container startup.
 # Use the install_methylator_tools.py script or run install-tools manually.
-# See README.md for instructions.
+# See ../README.md for instructions.
 
 # Container Style
-#COPY assets/img/full_logo.png $GALAXY_CONFIG_DIR/web/welcome_image.png
-#COPY welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
+#COPY ../assets/img/full_logo.png $GALAXY_CONFIG_DIR/web/welcome_image.png
+#COPY ../welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
