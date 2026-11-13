@@ -1,10 +1,11 @@
 # Methylator Galaxy
 ### AI-Friendly, Publication-Ready WGBS Analysis Platform
 
-![Galaxy](https://img.shields.io/badge/Galaxy-24.1-blue)
+![Galaxy](https://img.shields.io/badge/Galaxy-26.1-blue)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ed)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Build](https://img.shields.io/badge/Build-Optimized-brightgreen)
+![Status](https://github.com/urppeia/methylator-galaxy/actions/workflows/docker-build.yml/badge.svg)
 
 Methylator is a **containerized Galaxy instance** for whole genome bisulfite sequencing (WGBS) analysis, designed for **publication-quality research** and **AI agent integration**.
 
@@ -83,14 +84,21 @@ docker-compose exec galaxy shed-tools install -t /galaxy/tools.yaml -a fakekey -
 
 ## Documentation
 
-| Document | Purpose |
-|----------|---------|
-| **[QUICKSTART.md](QUICKSTART.md)** | Get started in 5 minutes |
-| **[PUBLICATION.md](PUBLICATION.md)** | Citation, reproducibility, publishing guidelines |
-| **[ARCHITECTURE.md](ARCHITECTURE.md)** | System design for developers & researchers |
-| **[API_REFERENCE.md](API_REFERENCE.md)** | Complete REST API & BioBlend guide |
-| **[AGENTS_SETUP.md](AGENTS_SETUP.md)** | Configure Orbit or other AI agents |
-| **[BUILD_OPTIMIZATION.md](BUILD_OPTIMIZATION.md)** | Docker build performance guide |
+All documentation has been organized for easy navigation. **Start here:**
+
+📖 **[docs/INDEX.md](docs/INDEX.md)** - Documentation guide & quick navigation
+
+### Quick Paths by Role
+
+| Role | Documentation |
+|------|---------------|
+| 🚀 **Quick Start** | [docs/guides/QUICKSTART.md](docs/guides/QUICKSTART.md) - Setup in 5 minutes |
+| 📚 **Researcher/Publishing** | [docs/publishing/PUBLICATION.md](docs/publishing/PUBLICATION.md) - Citation, reproducibility, methods |
+| 🤖 **AI/Agent Integration** | [docs/guides/AGENTS_SETUP.md](docs/guides/AGENTS_SETUP.md) - Orbit/MCP configuration |
+| 💻 **Developer** | [docs/api/API_REFERENCE.md](docs/api/API_REFERENCE.md) - REST API + 100+ examples |
+| 🏗️ **Architect** | [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) - System design |
+| ⚡ **DevOps** | [docs/development/BUILD_OPTIMIZATION.md](docs/development/BUILD_OPTIMIZATION.md) - Performance |
+| 📋 **Overview** | [docs/SETUP_SUMMARY.md](docs/SETUP_SUMMARY.md) - What's new? |
 
 ## Docker Image
 

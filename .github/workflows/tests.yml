@@ -1,0 +1,130 @@
+name: Tests & Validation
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  lint-yaml:
+    name: Lint YAML files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install yamllint
+        run: pip install yamllint
+      
+      - name: Lint YAML
+        run: |
+          yamllint -c .github/yamllint-config.yml \
+            config/methylator_tool_list.yaml \
+            config/docker/docker-compose.yml \
+            .github/workflows/*.yml
+        continue-on-error: true
+
+  lint-markdown:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Lint Markdown
+        uses: nosborn/github-action-markdown-cli@v3.3.0
+        with:
+          files: docs README.md
+          continue-on-error: true
+
+  validate-docker:
+    name: Validate Docker Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate Dockerfile
+        run: |
+          docker run --rm -i hadolint/hadolint < config/docker/Dockerfile
+        continue-on-error: true
+      
+      - name: Validate docker-compose.yml
+        run: |
+          python3 -c "import yaml; yaml.safe_load(open('config/docker/docker-compose.yml'))"
+          echo "✅ docker-compose.yml is valid"
+
+  validate-python:
+    name: Validate Python Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Lint Python
+        run: |
+          pip install flake8 pylint
+          flake8 scripts/*.py --count --select=E9,F63,F7,F82 --show-source --statistics || true
+          pylint scripts/*.py --exit-zero || true
+      
+      - name: Check Python syntax
+        run: |
+          python3 -m py_compile scripts/install_methylator_tools.py
+          echo "✅ Python scripts are valid"
+
+  check-docs:
+    name: Check Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check documentation exists
+        run: |
+          test -f docs/INDEX.md && echo "✅ docs/INDEX.md exists"
+          test -f docs/SETUP_SUMMARY.md && echo "✅ docs/SETUP_SUMMARY.md exists"
+          test -f docs/guides/QUICKSTART.md && echo "✅ docs/guides/QUICKSTART.md exists"
+          test -f docs/publishing/PUBLICATION.md && echo "✅ docs/publishing/PUBLICATION.md exists"
+          test -f docs/api/API_REFERENCE.md && echo "✅ docs/api/API_REFERENCE.md exists"
+          test -f docs/architecture/ARCHITECTURE.md && echo "✅ docs/architecture/ARCHITECTURE.md exists"
+          test -f docs/guides/AGENTS_SETUP.md && echo "✅ docs/guides/AGENTS_SETUP.md exists"
+          test -f docs/development/BUILD_OPTIMIZATION.md && echo "✅ docs/development/BUILD_OPTIMIZATION.md exists"
+      
+      - name: Check README
+        run: |
+          test -f README.md && echo "✅ README.md exists"
+          grep -q "docs/INDEX.md" README.md && echo "✅ README links to docs"
+
+  test-config-files:
+    name: Test Configuration Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check .env.example
+        run: |
+          test -f config/docker/.env.example && echo "✅ .env.example exists"
+          grep -q "GALAXY_" config/docker/.env.example && echo "✅ .env.example has Galaxy variables"
+      
+      - name: Check .gitignore
+        run: |
+          test -f .gitignore && echo "✅ .gitignore exists"
+          grep -q "__pycache__" .gitignore && echo "✅ .gitignore configured"
+
+  summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [lint-yaml, lint-markdown, validate-docker, validate-python, check-docs, test-config-files]
+    if: always()
+    steps:
+      - name: Report Status
+        run: |
+          echo "📊 Test Summary:"
+          echo "  ✅ YAML Linting: ${{ needs.lint-yaml.result }}"
+          echo "  ✅ Markdown Linting: ${{ needs.lint-markdown.result }}"
+          echo "  ✅ Docker Validation: ${{ needs.validate-docker.result }}"
+          echo "  ✅ Python Validation: ${{ needs.validate-python.result }}"
+          echo "  ✅ Documentation Check: ${{ needs.check-docs.result }}"
+          echo "  ✅ Config Files: ${{ needs.test-config-files.result }}"
