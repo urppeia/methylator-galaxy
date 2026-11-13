@@ -11,9 +11,11 @@ ENV GALAXY_CONFIG_BRAND="Methylator" \
 WORKDIR ${GALAXY_ROOT}
 
 # Install Galaxy MCP Server for AI agent integration
-RUN --mount=type=cache,target=/root/.cache/pip \
-    python3 -m pip install --upgrade pip && \
-    python3 -m pip install galaxy-mcp bioblend
+# Note: Galaxy 26.1 base image comes with necessary Python packages pre-installed
+# Uncomment and update this section if additional Python packages are needed
+# RUN --mount=type=cache,target=/root/.cache/pip \
+#     python3 -m pip install --upgrade pip && \
+#     python3 -m pip install galaxy-mcp bioblend
 
 # Add visualisations (less frequently changed than configs)
 RUN --mount=type=cache,target=/tmp \
