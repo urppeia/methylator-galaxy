@@ -9,10 +9,13 @@ ENV GALAXY_CONFIG_BRAND="Methylator" \
 # Adding the tool definitions to the container
 ADD methylator_tool_list.yaml ${GALAXY_ROOT}/tools.yaml
 
-# Note: Tools will be installed when the container is first run.
-# The Galaxy instance needs to be running for tool installation.
-# Users can install tools after container startup by running:
-# docker exec <container_id> install-tools /galaxy/tools.yaml
+# Add Python installation script
+ADD install_methylator_tools.py ${GALAXY_ROOT}/install_methylator_tools.py
+RUN chmod +x ${GALAXY_ROOT}/install_methylator_tools.py
+
+# Note: Tools will be installed after container startup.
+# Use the install_methylator_tools.py script or run install-tools manually.
+# See README.md for instructions.
 
 RUN mkdir -p $GALAXY_HOME/workflows
 
