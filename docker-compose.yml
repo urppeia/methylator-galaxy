@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  galaxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Use BuildKit for faster builds and better caching
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    container_name: methylator-galaxy
+    ports:
+      - "8080:80"
+      - "8888:8888"  # MCP Server port for agents
+    environment:
+      GALAXY_CONFIG_BRAND: ${GALAXY_CONFIG_BRAND:-Methylator}
+      GALAXY_ADMIN_USER: ${GALAXY_ADMIN_USER:-admin}
+      GALAXY_ADMIN_PASSWORD: ${GALAXY_ADMIN_PASSWORD:-password}
+      GALAXY_ADMIN_API_KEY: ${GALAXY_ADMIN_API_KEY:-fakekey}
+      # Reduced startup timeout from 600s to 120s for faster feedback
+      GALAXY_STARTUP_WAIT: ${GALAXY_STARTUP_WAIT:-120}
+      GALAXY_LOG_LEVEL: ${GALAXY_LOG_LEVEL:-INFO}
+      # Performance tuning
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+      # Enable Galaxy Agents support
+      GALAXY_ENABLE_AGENTS: "true"
+      # Optional: Use PostgreSQL for better performance than SQLite
+      # GALAXY_DATABASE_CONNECTION: postgresql://postgres:password@postgres:5432/galaxy
+    volumes:
+      # Persist Galaxy data
+      - galaxy-data:/home/galaxy/galaxy_storage
+      # Mount workflow directory for hot-reload during development
+      - ./workflows:/home/galaxy/workflows:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    restart: unless-stopped
+    # Reduce wait time for container startup
+    stop_grace_period: 30s
+    depends_on:
+      # Uncomment for PostgreSQL support:
+      # postgres:
+      #   condition: service_healthy
+
+  # Optional: Standalone MCP Server for agents (if not using Galaxy's built-in)
+  # Uncomment this service to run a separate MCP server on port 8888
+  # agent-mcp-server:
+  #   image: python:3.11-slim
+  #   container_name: methylator-mcp-server
+  #   working_dir: /app
+  #   ports:
+  #     - "8888:8888"
+  #   environment:
+  #     GALAXY_URL: http://galaxy:80
+  #     GALAXY_API_KEY: ${GALAXY_ADMIN_API_KEY:-fakekey}
+  #   command: >
+  #     bash -c "
+  #       pip install galaxy-mcp &&
+  #       python -m galaxy_mcp.server
+  #     "
+  #   depends_on:
+  #     - galaxy
+  #   restart: unless-stopped
+
+  # Optional: PostgreSQL for production-grade database (comment out for SQLite)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: methylator-postgres
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: galaxy
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: unless-stopped
+
+volumes:
+  galaxy-data:
+  # postgres-data:  # Uncomment when using PostgreSQL
+
+# Usage:
+# Development build with BuildKit:
+#   DOCKER_BUILDKIT=1 docker-compose build --progress=plain
+# 
+# Start container:
+#   docker-compose up -d
+#
+# View logs:
+#   docker-compose logs -f galaxy
+#
+# Stop container:
+#   docker-compose down
+#
+# View installed tools:
+#   docker-compose exec galaxy galaxy-http-get http://localhost/api/tools
