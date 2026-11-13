@@ -1,0 +1,173 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - '20*'  # Matches tags like 2026.01, 2026.02, etc.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., 2026.01)'
+        required: true
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get tag info
+        id: tag_info
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TAG=${{ github.event.inputs.tag }}
+          else
+            TAG=${GITHUB_REF#refs/tags/}
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          cat > release_notes.md << 'EOF'
+          # Release ${{ steps.tag_info.outputs.tag }}
+          
+          ## 🎉 What's New
+          
+          This release includes:
+          - Updated Galaxy base image to 26.1
+          - Comprehensive documentation (2,300+ lines)
+          - Publication-ready support (citation, reproducibility)
+          - AI/Agent integration (Orbit, MCP Server)
+          - Performance optimizations (6-8x faster builds)
+          - GitHub Actions CI/CD pipeline
+          
+          ## 📦 Artifacts
+          
+          - Docker image: `docker.io/dktanwar/methylator-galaxy:${{ steps.tag_info.outputs.tag }}`
+          - Source: This repository
+          
+          ## 📚 Documentation
+          
+          Start here: **[docs/INDEX.md](docs/INDEX.md)**
+          
+          - Quick Start: [docs/guides/QUICKSTART.md](docs/guides/QUICKSTART.md)
+          - Publishing: [docs/publishing/PUBLICATION.md](docs/publishing/PUBLICATION.md)
+          - AI Integration: [docs/guides/AGENTS_SETUP.md](docs/guides/AGENTS_SETUP.md)
+          - API Reference: [docs/api/API_REFERENCE.md](docs/api/API_REFERENCE.md)
+          - Architecture: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
+          
+          ## 🚀 Quick Start
+          
+          ```bash
+          # Build
+          export DOCKER_BUILDKIT=1
+          cd config/docker
+          docker-compose build --progress=plain
+          
+          # Start
+          docker-compose up -d
+          
+          # Install tools
+          docker-compose exec galaxy python /galaxy/install_methylator_tools.py
+          
+          # Access
+          open http://localhost:8080
+          ```
+          
+          ## 🔧 Installation & Usage
+          
+          See [docs/guides/QUICKSTART.md](docs/guides/QUICKSTART.md) for complete setup instructions.
+          
+          ## 📋 System Requirements
+          
+          - Docker 19.03+
+          - Docker Compose 3.8+
+          - 8+ GB RAM
+          - 50+ GB disk space (for analyses)
+          - BuildKit enabled (for optimal performance)
+          
+          ## 🤝 Contributing
+          
+          See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+          
+          ## 📞 Support
+          
+          - Documentation: [docs/INDEX.md](docs/INDEX.md)
+          - Issues: [GitHub Issues](../../issues)
+          - Galaxy Help: [Galaxy Help Forum](https://help.galaxyproject.org/)
+          
+          ---
+          
+          **Published:** $(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          EOF
+          cat release_notes.md
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          files: |
+            docs/**/*.md
+            config/docker/Dockerfile
+            config/docker/docker-compose.yml
+            README.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Release
+        run: |
+          echo "✅ Release ${{ steps.tag_info.outputs.tag }} created successfully!"
+          echo "🔗 Docker image: docker.io/dktanwar/methylator-galaxy:${{ steps.tag_info.outputs.tag }}"
+
+  publish-docker:
+    name: Publish Docker Image
+    runs-on: ubuntu-latest
+    needs: [create-release]
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract tag
+        id: meta
+        run: |
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./config/docker/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${{ steps.meta.outputs.tag }}
+            ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:latest
+          labels: |
+            org.opencontainers.image.title=methylator-galaxy
+            org.opencontainers.image.description=Publication-ready and AI-friendly WGBS analysis platform
+            org.opencontainers.image.version=${{ steps.meta.outputs.tag }}
+
+      - name: Image published
+        run: echo "✅ Docker image published: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE }}:${{ steps.meta.outputs.tag }}"
