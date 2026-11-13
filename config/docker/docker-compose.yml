@@ -3,8 +3,8 @@ version: '3.8'
 services:
   galaxy:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: config/docker/Dockerfile
       # Use BuildKit for faster builds and better caching
       args:
         BUILDKIT_INLINE_CACHE: 1
