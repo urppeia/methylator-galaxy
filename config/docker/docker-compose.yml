@@ -8,6 +8,7 @@ services:
       # Use BuildKit for faster builds and better caching
       args:
         BUILDKIT_INLINE_CACHE: 1
+    image: methylator-galaxy:latest
     container_name: methylator-galaxy
     ports:
       - "8080:80"
