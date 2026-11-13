@@ -2,10 +2,10 @@ name: Tests & Validation
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: ["main"]
+  workflow_dispatch: {}
 
 jobs:
   lint-yaml:
@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install yamllint
         run: pip install yamllint
-      
+
       - name: Lint YAML
         run: |
           yamllint -c .github/yamllint-config.yml \
@@ -30,12 +30,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Lint Markdown
         uses: nosborn/github-action-markdown-cli@v3.3.0
         with:
           files: docs README.md
-          continue-on-error: true
+        continue-on-error: true
 
   validate-docker:
     name: Validate Docker Configuration
