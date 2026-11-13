@@ -3,11 +3,11 @@ name: Create Release
 on:
   push:
     tags:
-      - '20*'  # Matches tags like 2026.01, 2026.02, etc.
+      - "20*"  # Matches tags like 2026.01, 2026.02, etc.
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag (e.g., 2026.01)'
+        description: "Release tag (e.g., 2026.01)"
         required: true
 
 jobs:
