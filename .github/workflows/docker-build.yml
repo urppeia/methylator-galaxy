@@ -3,6 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+    tags: [ "20*" ]
 
 jobs:
   build-and-push:
@@ -18,5 +19,6 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
+        file: ./config/docker/Dockerfile
         push: true
-        tags: dktanwar/methylator-galaxy:latest
+        tags: dktanwar/methylator-galaxy:latest,${{ github.ref_type == 'tag' && format('dktanwar/methylator-galaxy:{0}', github.ref_name) || '' }}
