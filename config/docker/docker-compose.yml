@@ -40,10 +40,10 @@ services:
     restart: unless-stopped
     # Reduce wait time for container startup
     stop_grace_period: 30s
-    depends_on:
-      # Uncomment for PostgreSQL support:
-      # postgres:
-      #   condition: service_healthy
+    # Uncomment depends_on for PostgreSQL support:
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
 
   # Optional: Standalone MCP Server for agents (if not using Galaxy's built-in)
   # Uncomment this service to run a separate MCP server on port 8888
