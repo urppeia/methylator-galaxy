@@ -25,13 +25,14 @@ services:
       GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
       # Enable Galaxy Agents support
       GALAXY_ENABLE_AGENTS: "true"
+      # Use local task runner instead of Celery to avoid RabbitMQ dependency
+      GALAXY_CELERY_BROKER: "memory://"
+      GALAXY_CELERY_BACKEND: "cache+memory://"
       # Optional: Use PostgreSQL for better performance than SQLite
       # GALAXY_DATABASE_CONNECTION: postgresql://postgres:password@postgres:5432/galaxy
     volumes:
       # Persist Galaxy data
       - galaxy-data:/home/galaxy/galaxy_storage
-      # Mount workflow directory for hot-reload during development
-      - ./workflows:/home/galaxy/workflows:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/api/version"]
       interval: 10s
