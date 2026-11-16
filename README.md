@@ -63,7 +63,22 @@ docker-compose ps  # Shows "healthy" when ready
 docker-compose logs -f galaxy
 ```
 
-### 4. Access & Install Tools
+### 4. Import Workflows
+```bash
+# Option A: Manual import via UI (easiest)
+# 1. Open http://localhost:8080
+# 2. Click "Workflows" > "Import"
+# 3. Upload workflows/wgbs_part1.ga and workflows/wgbs_part2.ga
+# 4. Click workflow settings > "Make published" to publish
+
+# Option B: Automatic import (via API - requires setup)
+docker-compose exec -T galaxy python3 /galaxy/import_workflows.py
+
+# Option C: Import from Galaxy tools menu
+# - Workflows > Import > "Local file" > Select from /home/galaxy/workflows/
+```
+
+### 5. Install Tools & Run Analysis
 ```bash
 # Access Galaxy web interface
 open http://localhost:8080
@@ -76,7 +91,7 @@ docker-compose exec galaxy python /galaxy/install_methylator_tools.py
 docker-compose exec galaxy shed-tools install -t /galaxy/tools.yaml -a fakekey -u http://localhost
 ```
 
-### 5. Run Analysis
+### 6. Run Analysis
 - Upload FASTQ file via web UI (or API)
 - Select workflow: `wgbs_part1` or `wgbs_part2`
 - Run and monitor progress
