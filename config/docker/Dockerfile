@@ -20,11 +20,23 @@ RUN --mount=type=cache,target=/tmp \
 
 RUN mkdir -p ${GALAXY_HOME}/workflows
 
+# Add Galaxy configuration override (disable RabbitMQ, use memory broker)
+COPY ../config/galaxy.yml ${GALAXY_ROOT}/config/
+
 COPY ../config/methylator_tool_list.yaml ${GALAXY_ROOT}/tools.yaml
 COPY ../scripts/install_methylator_tools.py ${GALAXY_ROOT}/
 RUN chmod +x ${GALAXY_ROOT}/install_methylator_tools.py
 
-COPY ../scripts/import_workflows.py ${GALAXY_ROOT}/
-RUN chmod +x ${GALAXY_ROOT}/import_workflows.py
+COPY ../scripts/init_workflows.py ${GALAXY_ROOT}/
+RUN chmod +x ${GALAXY_ROOT}/init_workflows.py
 
 COPY ../workflows/ ${GALAXY_HOME}/workflows/
+
+# Create entrypoint that just runs Galaxy
+RUN echo '#!/bin/bash' > /usr/local/bin/init-galaxy.sh && \
+    echo 'set -e' >> /usr/local/bin/init-galaxy.sh && \
+    echo 'exec /usr/bin/startup "$@"' >> /usr/local/bin/init-galaxy.sh && \
+    chmod +x /usr/local/bin/init-galaxy.sh
+
+ENTRYPOINT ["/usr/local/bin/init-galaxy.sh"]
+CMD []

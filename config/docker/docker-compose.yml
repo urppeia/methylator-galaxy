@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: methylator-postgres
+    environment:
+      POSTGRES_USER: galaxy
+      POSTGRES_PASSWORD: galaxy
+      POSTGRES_DB: galaxy
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U galaxy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   galaxy:
     build:
       context: ../..
@@ -28,11 +44,14 @@ services:
       # Use local task runner instead of Celery to avoid RabbitMQ dependency
       GALAXY_CELERY_BROKER: "memory://"
       GALAXY_CELERY_BACKEND: "cache+memory://"
-      # Optional: Use PostgreSQL for better performance than SQLite
-      # GALAXY_DATABASE_CONNECTION: postgresql://postgres:password@postgres:5432/galaxy
+      # Use PostgreSQL database
+      GALAXY_DATABASE_CONNECTION: "postgresql://galaxy:galaxy@postgres:5432/galaxy"
     volumes:
       # Persist Galaxy data
       - galaxy-data:/home/galaxy/galaxy_storage
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/api/version"]
       interval: 10s
@@ -42,10 +61,6 @@ services:
     restart: unless-stopped
     # Reduce wait time for container startup
     stop_grace_period: 30s
-    # Uncomment depends_on for PostgreSQL support:
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
 
   # Optional: Standalone MCP Server for agents (if not using Galaxy's built-in)
   # Uncomment this service to run a separate MCP server on port 8888
@@ -86,7 +101,7 @@ services:
 
 volumes:
   galaxy-data:
-  # postgres-data:  # Uncomment when using PostgreSQL
+  postgres-data:
 
 # Usage:
 # Development build with BuildKit:

@@ -1,0 +1,11 @@
+# Methylator Galaxy Configuration
+# Customizations on top of default Galaxy configuration
+
+# Use SQLite database instead of PostgreSQL for simpler setup
+database_connection: sqlite:////home/galaxy/galaxy_storage/galaxy.db
+
+# Use memory-based message broker instead of RabbitMQ
+celery_broker: memory://
+celery_backend: cache+memory://
+
+# Minimal configuration - inherits defaults from Galaxy 26.1
