@@ -1,11 +1,29 @@
 # Methylator Galaxy Configuration
 # Customizations on top of default Galaxy configuration
 
-# Use SQLite database instead of PostgreSQL for simpler setup
-database_connection: sqlite:////home/galaxy/galaxy_storage/galaxy.db
+# Use SQLite database (simpler setup, like Preprint version)
+database_connection: sqlite:////export/galaxy/universe.sqlite?isolation_level=IMMEDIATE
 
-# Use memory-based message broker instead of RabbitMQ
+# Use in-memory message broker
 celery_broker: memory://
 celery_backend: cache+memory://
+
+# Disable internal PostgreSQL, RabbitMQ, and Celery (SQLite compatible)
+nonuse: "postgres,rabbitmq,celery"
+
+# Disable job handlers to avoid SQLite locking with multiple processes
+handler_nprocs: 0
+
+# Galaxy paths
+file_path: /export/galaxy/files
+new_file_path: /export/galaxy/tmp
+tool_data_path: /export/galaxy/tool_data
+shed_tool_data_path: /export/galaxy/shed_tool_data
+shed_tools_dir: /export/galaxy/shed_tools
+shed_tool_config_file: /etc/galaxy/shed_tool_conf.xml
+job_working_directory: /export/galaxy/job_working_directory
+galaxy_infrastructure_url: http://localhost:8080
+interactivetools_enable: true
+static_enabled: true
 
 # Minimal configuration - inherits defaults from Galaxy 26.1
