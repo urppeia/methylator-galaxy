@@ -1,22 +1,6 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: methylator-postgres
-    environment:
-      POSTGRES_USER: galaxy
-      POSTGRES_PASSWORD: galaxy
-      POSTGRES_DB: galaxy
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U galaxy"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
   galaxy:
     build:
       context: ../..
@@ -41,17 +25,25 @@ services:
       GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
       # Enable Galaxy Agents support
       GALAXY_ENABLE_AGENTS: "true"
+      # Auto-migrate database schema on startup
+      GALAXY_AUTO_UPDATE_DB: "true"
+      # Create default admin user on startup
+      GALAXY_DEFAULT_ADMIN_USER: "admin"
+      GALAXY_DEFAULT_ADMIN_EMAIL: "admin@example.org"
+      GALAXY_DEFAULT_ADMIN_PASSWORD: ${GALAXY_ADMIN_PASSWORD:-password}
+      GALAXY_DEFAULT_ADMIN_KEY: ${GALAXY_ADMIN_API_KEY:-fakekey}
       # Use local task runner instead of Celery to avoid RabbitMQ dependency
       GALAXY_CELERY_BROKER: "memory://"
       GALAXY_CELERY_BACKEND: "cache+memory://"
-      # Use PostgreSQL database
-      GALAXY_DATABASE_CONNECTION: "postgresql://galaxy:galaxy@postgres:5432/galaxy"
+      # Use SQLite database (simpler, like Preprint version)
+      GALAXY_DATABASE_CONNECTION: "sqlite:////export/galaxy/universe.sqlite?isolation_level=IMMEDIATE"
+      # Disable internal PostgreSQL, RabbitMQ, and Celery (SQLite compatible)
+      NONUSE: "postgres,rabbitmq,celery"
+      # Disable job handlers to avoid SQLite locking with multiple processes
+      GALAXY_HANDLER_NUMPROCS: "0"
     volumes:
       # Persist Galaxy data
-      - galaxy-data:/home/galaxy/galaxy_storage
-    depends_on:
-      postgres:
-        condition: service_healthy
+      - galaxy-data:/export/galaxy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/api/version"]
       interval: 10s
@@ -62,51 +54,13 @@ services:
     # Reduce wait time for container startup
     stop_grace_period: 30s
 
-  # Optional: Standalone MCP Server for agents (if not using Galaxy's built-in)
-  # Uncomment this service to run a separate MCP server on port 8888
-  # agent-mcp-server:
-  #   image: python:3.11-slim
-  #   container_name: methylator-mcp-server
-  #   working_dir: /app
-  #   ports:
-  #     - "8888:8888"
-  #   environment:
-  #     GALAXY_URL: http://galaxy:80
-  #     GALAXY_API_KEY: ${GALAXY_ADMIN_API_KEY:-fakekey}
-  #   command: >
-  #     bash -c "
-  #       pip install galaxy-mcp &&
-  #       python -m galaxy_mcp.server
-  #     "
-  #   depends_on:
-  #     - galaxy
-  #   restart: unless-stopped
-
-  # Optional: PostgreSQL for production-grade database (comment out for SQLite)
-  # postgres:
-  #   image: postgres:15-alpine
-  #   container_name: methylator-postgres
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: galaxy
-  #   volumes:
-  #     - postgres-data:/var/lib/postgresql/data
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U postgres"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   restart: unless-stopped
-
 volumes:
   galaxy-data:
-  postgres-data:
 
 # Usage:
 # Development build with BuildKit:
 #   DOCKER_BUILDKIT=1 docker-compose build --progress=plain
-# 
+#
 # Start container:
 #   docker-compose up -d
 #
