@@ -69,3 +69,4 @@ results/
 # Galaxy data
 galaxy-data/
 postgres-data/
+.aider*

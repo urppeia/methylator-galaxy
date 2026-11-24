@@ -11,3 +11,5 @@ rules:
   comments-indentation: disable
   comments:
     min-spaces-from-content: 2
+  truthy:
+    level: warning

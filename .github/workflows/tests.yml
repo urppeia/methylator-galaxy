@@ -42,12 +42,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Validate Dockerfile
         run: |
           docker run --rm -i hadolint/hadolint < config/docker/Dockerfile
         continue-on-error: true
-      
+
       - name: Validate docker-compose.yml
         run: |
           python3 -c "import yaml; yaml.safe_load(open('config/docker/docker-compose.yml'))"
@@ -58,18 +58,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
+
       - name: Lint Python
         run: |
           pip install flake8 pylint
           flake8 scripts/*.py --count --select=E9,F63,F7,F82 --show-source --statistics || true
           pylint scripts/*.py --exit-zero || true
-      
+
       - name: Check Python syntax
         run: |
           python3 -m py_compile scripts/install_methylator_tools.py
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Check documentation exists
         run: |
           test -f docs/INDEX.md && echo "✅ docs/INDEX.md exists"
@@ -91,7 +91,7 @@ jobs:
           test -f docs/architecture/ARCHITECTURE.md && echo "✅ docs/architecture/ARCHITECTURE.md exists"
           test -f docs/guides/AGENTS_SETUP.md && echo "✅ docs/guides/AGENTS_SETUP.md exists"
           test -f docs/development/BUILD_OPTIMIZATION.md && echo "✅ docs/development/BUILD_OPTIMIZATION.md exists"
-      
+
       - name: Check README
         run: |
           test -f README.md && echo "✅ README.md exists"
@@ -102,12 +102,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Check .env.example
         run: |
           test -f config/docker/.env.example && echo "✅ .env.example exists"
           grep -q "GALAXY_" config/docker/.env.example && echo "✅ .env.example has Galaxy variables"
-      
+
       - name: Check .gitignore
         run: |
           test -f .gitignore && echo "✅ .gitignore exists"
