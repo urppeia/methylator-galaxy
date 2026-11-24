@@ -31,16 +31,6 @@ def wait_for_galaxy(timeout=300, retries=60):
     print("✗ Galaxy did not become ready within timeout")
     return False
 
-def get_user_id(headers):
-    """Get the current user's ID."""
-    try:
-        response = requests.get(f"{GALAXY_URL}/api/users/current", headers=headers, timeout=10)
-        if response.status_code == 200:
-            return response.json().get("id")
-    except:
-        pass
-    return None
-
 def import_workflow(workflow_file, headers):
     """Import a single workflow file."""
     try:
@@ -49,14 +39,14 @@ def import_workflow(workflow_file, headers):
     except Exception as e:
         print(f"✗ Failed to read {Path(workflow_file).name}: {e}")
         return None
-    
+
     workflow_name = workflow_data.get("name", Path(workflow_file).stem)
-    
+
+    # Galaxy API expects workflow JSON as 'archive_file' parameter
     files = {
-        "workflow_name": (None, workflow_name),
-        "workflow_data": (Path(workflow_file).name, json.dumps(workflow_data))
+        "archive_file": (Path(workflow_file).name, json.dumps(workflow_data), "application/json")
     }
-    
+
     try:
         response = requests.post(
             f"{GALAXY_URL}/api/workflows",
@@ -64,11 +54,16 @@ def import_workflow(workflow_file, headers):
             files=files,
             timeout=30
         )
-        
+
         if response.status_code in (200, 201):
             result = response.json()
             workflow_id = result.get("id")
-            print(f"✓ Imported: {workflow_name} (ID: {workflow_id})")
+            status = result.get("status", "unknown")
+            message = result.get("message", "")
+            if status == "success":
+                print(f"✓ Imported: {workflow_name} (ID: {workflow_id})")
+            else:
+                print(f"⚠ Imported with warnings: {workflow_name} (ID: {workflow_id}) - {message}")
             return workflow_id
         else:
             print(f"✗ Failed to import {workflow_name}: {response.status_code}")
@@ -104,16 +99,20 @@ def main():
     if not wait_for_galaxy():
         print("\nNote: Galaxy may still be initializing. Workflows can be manually imported later.")
         return 1
-    
-    headers = {"X-Galaxy-Authorization": GALAXY_API_KEY}
-    
-    # Verify authentication
-    user_id = get_user_id(headers)
-    if not user_id:
-        print("✗ Failed to authenticate with Galaxy")
+
+    # Galaxy API uses 'x-api-key' header for API key authentication
+    headers = {"x-api-key": GALAXY_API_KEY}
+
+    # Verify authentication by checking version endpoint
+    try:
+        response = requests.get(f"{GALAXY_URL}/api/version", headers=headers, timeout=10)
+        if response.status_code != 200:
+            print("✗ Failed to authenticate with Galaxy")
+            return 1
+        print(f"✓ Authenticated with Galaxy\n")
+    except Exception as e:
+        print(f"✗ Failed to authenticate with Galaxy: {e}")
         return 1
-    
-    print(f"✓ Authenticated as user {user_id}\n")
     
     if not os.path.isdir(WORKFLOWS_DIR):
         print(f"✗ Workflows directory not found: {WORKFLOWS_DIR}")
