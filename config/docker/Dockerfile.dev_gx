@@ -1,0 +1,8 @@
+# Minimal Galaxy 26.1 - no customizations
+FROM quay.io/bgruening/galaxy:26.1
+
+LABEL maintainer="Deepak K. Tanwar, dktanwar@hotmail.com"
+LABEL description="Vanilla Galaxy 26.1 for comparison/testing"
+
+# Use default Galaxy entrypoint (gravity + startup)
+# No tool installation, no workflow import, no custom config
